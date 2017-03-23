@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 	"os/exec"
+	"strings"
 )
 
 func main() {
@@ -67,7 +68,10 @@ func execNlpnetCommand(attribts attributes) string {
 		os.Exit(1)
 	}
 	//TODO: Converter JSON
-	return string(cmdReader)
+	replacer := strings.NewReplacer("(u'", "{\"", "', u'", "\": \"", "')", "\"}")
+	//, "',", "\":", "(", "{", ")", "}", "'", "\"", "\",", "\":")
+
+	return replacer.Replace(string(cmdReader))
 }
 
 type attributes struct {

@@ -5,6 +5,6 @@ import nlpnet
 
 
 nlpnet.set_data_dir('/Users/emartins/nlpnet-data/')
-TARGER = nlpnet.POSTagger()
-print TARGER.tag(" ".join(sys.argv[1:]))
+TAGGER = nlpnet.POSTagger()
+print TAGGER.tag(" ".join(sys.argv[1:]))
 
