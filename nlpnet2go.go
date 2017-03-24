@@ -37,7 +37,13 @@ func main() {
 	caso contrário se comporta como serviço de api web*/
 	if len(args) != 0 {
 		for i := 0; i < len(args); i++ {
-			text2analize += args[i] + " "
+			if args[i] == "-m" {
+				attribts.Method = args[i+1]
+				i = i + 1
+			} else {
+				text2analize += args[i] + " "
+			}
+
 		}
 		log.Println(execNlpnetCommand(attribts, text2analize))
 
@@ -47,15 +53,6 @@ func main() {
 			/* Valida as entradas e carrega a estrutura */
 			if method := r.FormValue("method"); method != "" {
 				attribts.Method = method
-
-				/* Atualiza o arquivo de configuração em relação ao metodo de tagger
-				a fim de ser utilizado pelo script python */
-				// cfg.Section("attributes").Key("method").SetValue(attribts.Method)
-				// err = cfg.SaveTo(setupfile)
-				// if err != nil {
-				// 	fmt.Fprintln(os.Stderr, "Error:", err)
-				// 	os.Exit(1)
-				// }
 			}
 			if txt := r.FormValue("txt"); txt != "" {
 				text2analize = txt
