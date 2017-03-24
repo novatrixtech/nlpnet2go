@@ -37,7 +37,7 @@ if METHOD == "pos":
 elif METHOD == "srl":
     TAGGER = nlpnet.SRLTagger()
     SENT = TAGGER.tag(TEXT)[0]
-    print SENT.tokens
+    print SENT.arg_structures
 else:
     print sys.argv[1:], "Invalid Tagger method operator. Only 'pos' OR 'srl' allowed."
 # print sys.argv[1:]

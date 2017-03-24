@@ -62,8 +62,9 @@ func main() {
 			io.WriteString(w, execNlpnetCommand(attribts, text2analize))
 
 		})
-
+		fmt.Printf("nlpnet2go running at: %s\n", attribts.Port)
 		http.ListenAndServe(":"+attribts.Port, nil)
+
 	}
 
 }
@@ -75,7 +76,7 @@ func execNlpnetCommand(attribts *attributes, text2analize string) string {
 
 	cmdReader, err := cmd.Output()
 	if err != nil {
-		fmt.Fprintln(os.Stderr, "Error:", err)
+		fmt.Printf("Error: [%s]", err.Error())
 		os.Exit(1)
 	}
 
