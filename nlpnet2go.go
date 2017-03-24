@@ -50,12 +50,12 @@ func main() {
 
 				/* Atualiza o arquivo de configuração em relação ao metodo de tagger
 				a fim de ser utilizado pelo script python */
-				cfg.Section("attributes").Key("method").SetValue(attribts.Method)
-				err = cfg.SaveTo(setupfile)
-				if err != nil {
-					fmt.Fprintln(os.Stderr, "Error:", err)
-					os.Exit(1)
-				}
+				// cfg.Section("attributes").Key("method").SetValue(attribts.Method)
+				// err = cfg.SaveTo(setupfile)
+				// if err != nil {
+				// 	fmt.Fprintln(os.Stderr, "Error:", err)
+				// 	os.Exit(1)
+				// }
 			}
 			if txt := r.FormValue("txt"); txt != "" {
 				text2analize = txt
@@ -73,7 +73,7 @@ func main() {
 
 func execNlpnetCommand(attribts *attributes, text2analize string) string {
 
-	cmdArgs := []string{attribts.Nlpnet2gopy, text2analize}
+	cmdArgs := []string{attribts.Nlpnet2gopy, "-t", text2analize, "-m", attribts.Method}
 	cmd := exec.Command(attribts.CmdName, cmdArgs...)
 
 	cmdReader, err := cmd.Output()
