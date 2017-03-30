@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 	"log"
@@ -83,12 +84,42 @@ func execNlpnetCommand(attribts *attributes, text2analize string) string {
 	/* Conversão para JSON */
 	var result string
 	if attribts.Method == "pos" {
-		replacer := strings.NewReplacer("(u'", "{\"", "', u'", "\": \"", "')", "\"}")
+		//fmt.Printf("%s\n", string(cmdReader))
+		/*
+			Os replaces abaixo são para tratar o retorno do nlpnet.
+			Exemplo: [[(u'o', u'ART'), (u'rato', u'N'), (u'roeu', u'V'), (u'a', u'ART'), (u'roupa', u'N'), (u'do', u'PREP+ART'), (u'rei', u'N'), (u'de', u'PREP'), (u'roma', u'N'), (u'com', u'PREP'), (u'queijo', u'N')]]
+		*/
+		replacer := strings.NewReplacer("[", "", "]", "", "(u'", "", " u'", "", "'", "", "),", ");")
+		replacerInsider := strings.NewReplacer("(", "", ")", "")
 		result = replacer.Replace(string(cmdReader))
+		retornos := strings.Split(result, ";")
+		result = ""
+		ret := Retorno{}
+		arrRetornoItems := []RetornoItem{}
+		for _, item := range retornos {
+			item = replacerInsider.Replace(item)
+			chaveValores := strings.Split(item, ",")
+			tipo := strings.TrimSpace(chaveValores[1])
+			valor := strings.TrimSpace(chaveValores[0])
+			if tipo == "N" || tipo == "NPROP" {
+				if valor == "queijo" {
+					tipo = "ALIMENTO"
+				}
+			}
+			retItem := RetornoItem{Chave: tipo, Valor: valor}
+			arrRetornoItems = append(arrRetornoItems, retItem)
+			fmt.Printf("Tipo: [%s] Valor: [%s]\n", tipo, valor)
+		}
+		ret.RetornoItems = arrRetornoItems
+		jsonret, err := json.Marshal(ret)
+		if err != nil {
+			return "Erro na geracao do JSON. Erro: " + err.Error()
+		}
+		return string(jsonret)
 	} else {
-		result = string(cmdReader)
+		return string(cmdReader)
 	}
-	return result
+	return ""
 
 }
 
@@ -98,4 +129,12 @@ type attributes struct {
 	CmdName     string `ini:"cmdName"`
 	Nlpnet2gopy string `ini:"nlpnet2gopy"`
 	Setdatadir  string `ini:"setdatadir"`
+}
+
+type Retorno struct {
+	RetornoItems []RetornoItem `json:"items"`
+}
+type RetornoItem struct {
+	Chave string `json:"chave"`
+	Valor string `json:"valor"`
 }
