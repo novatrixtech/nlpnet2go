@@ -119,7 +119,6 @@ func execNlpnetCommand(attribts *attributes, text2analize string) string {
 	} else {
 		return string(cmdReader)
 	}
-	return ""
 
 }
 
