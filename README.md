@@ -7,7 +7,8 @@ Em bom português: **se tu precisas de uma ferramenta de processamento de lingua
 
 NLP net was created by Erick Rocha Fonseca - https://github.com/erickrf
 
-To use it you need to setup NLP net first than just point out to nlpnet2go system where to call NLP net. These steps are below:
+To use it you need to setup NLP net first than just point out to nlpnet2go system where to call NLP net. 
+In order to install NLP Net please follow the steps below:
 ```
 $ python -m pip install --upgrade pip
 $ pip install --user numpy scipy matplotlib ipython jupyter pandas sympy nose nltk nlpnet 
@@ -15,3 +16,4 @@ $ python
 >>> import nltk
 >>> nltk.download()
 ```
+Go to the Models tab in the NLTK screen and select the Punkt tokenizer. It is used in order to split the text into sentences.
